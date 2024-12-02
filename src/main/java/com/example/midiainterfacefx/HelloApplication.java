@@ -37,7 +37,6 @@ public class HelloApplication extends Application {
             }
         });
 
-        System.out.println(eixoX + " " + eixoY);
     }
 
     public static void main(String[] args) {

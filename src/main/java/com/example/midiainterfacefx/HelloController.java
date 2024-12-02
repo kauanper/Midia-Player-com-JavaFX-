@@ -4,6 +4,8 @@ import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -21,6 +23,7 @@ public class HelloController {
     private MediaPlayer mediaPlayer;
     private List<String> musicas;
     private int indexMusicaAtual;
+    private double vol = 30;
 
     @FXML
     private AnchorPane telaAppMusica;
@@ -30,12 +33,21 @@ public class HelloController {
     private Slider tempoMusica, som;
     @FXML
     private Label tempoAtual, tempoTotal, nomeMusica;
+    @FXML
+    private ImageView audio;
 
     public void initialize() {
+        som.setValue(vol);
+        som.valueProperty().addListener((observable, oldValue, newValue) -> {
+            vol = newValue.doubleValue();
+            mediaPlayer.setVolume(vol / 100);
+        });
+
         carregarMusicas();
         formatarNomeMusica();
         movimentar();
         definirTempo();
+        ajustarVolume();
     }
 
     private void carregarMusicas(){
@@ -52,20 +64,50 @@ public class HelloController {
         Media media = new Media(musicaAtual);
         mediaPlayer = new MediaPlayer(media);
         mediaview.setMediaPlayer(mediaPlayer);
+        mediaPlayer.setVolume(vol / 100);
     }
 
-    private void setIndexMusicaAtual(){
+    private void ajustarVolume() {
+        som.valueProperty().addListener((observable, oldValue, newValue) -> {
+            vol = newValue.doubleValue() / 100; // Atualiza o volume global
+            if (vol == 0) {
+                mediaPlayer.setMute(true); // Ativa o mudo se o volume for 0
+                Image imagem = new Image(getClass().getResource("/com/example/midiainterfacefx/imagens/resources/audioOff.png").toExternalForm());
+                audio.setImage(imagem);
+            } else {
+                mediaPlayer.setMute(false); // Desativa o mudo
+                mediaPlayer.setVolume(vol); // Atualiza o volume no player
+                Image imagem = new Image(getClass().getResource("/com/example/midiainterfacefx/imagens/resources/audioOn.png").toExternalForm());
+                audio.setImage(imagem);
+            }
+        });
+    }
+
+
+    private void verificarVol(){
+        if(vol == 0){
+            mediaPlayer.setMute(true);
+            mediaPlayer.setVolume(0);
+        }
+    }
+
+    private void setIndexMusicaAtual() {
         String musicaAtual = musicas.get(indexMusicaAtual);
 
         Media media = new Media(musicaAtual);
         mediaPlayer = new MediaPlayer(media);
         mediaview.setMediaPlayer(mediaPlayer);
 
+        // Atualiza o volume e estado de mudo
+        mediaPlayer.setVolume(vol);
+        mediaPlayer.setMute(vol == 0);
+
         mediaPlayer.play();
         formatarNomeMusica();
         movimentar();
         definirTempo();
     }
+
 
     private void definirTempo(){
         mediaPlayer.setOnReady(() -> {
@@ -101,6 +143,10 @@ public class HelloController {
 
             // Atualizar o valor do slider com o tempo atual
             tempoMusica.setValue(tempoTotalAtual.toSeconds());
+        });
+
+        mediaPlayer.setOnEndOfMedia(() -> {
+            proximaMusica();
         });
     }
 
@@ -168,6 +214,7 @@ public class HelloController {
 
     public void playMusica(){
         mediaPlayer.play();
+        verificarVol();
     }
 
     public void pausarMusica(){
@@ -178,7 +225,19 @@ public class HelloController {
         mediaPlayer.stop();
     }
 
-    public void mutarMusica(){
-
+    public void mutarMusica() {
+        if (mediaPlayer.isMute()) {
+            // Desmuta e restaura o volume original
+            mediaPlayer.setMute(false);
+            mediaPlayer.setVolume(vol);
+            Image imagem = new Image(getClass().getResource("/com/example/midiainterfacefx/imagens/resources/audioOn.png").toExternalForm());
+            audio.setImage(imagem);
+        } else {
+            // Muta, mas mantém o valor do slider
+            mediaPlayer.setMute(true);
+            Image imagem = new Image(getClass().getResource("/com/example/midiainterfacefx/imagens/resources/audioOff.png").toExternalForm());
+            audio.setImage(imagem);
+        }
     }
+
 }
