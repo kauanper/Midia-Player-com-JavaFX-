@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="telaAppMusica" prefHeight="336.0" prefWidth="322.0" style="-fx-background-color: rgb(53, 53, 53);" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.midiainterfacefx.HelloController">
+   <Text fill="WHITE" layoutX="273.0" layoutY="29.0" onMouseClicked="#minimizar" strokeType="OUTSIDE" strokeWidth="0.0" text="-">
+      <font>
+         <Font name="System Bold" size="24.0" />
+      </font>
+   </Text>
+   <Text fill="WHITE" layoutX="294.0" layoutY="29.0" onMouseClicked="#fechar" strokeType="OUTSIDE" strokeWidth="0.0" text="x">
+      <font>
+         <Font name="System Bold" size="24.0" />
+      </font>
+   </Text>
+   <ImageView fitHeight="119.0" fitWidth="97.0" layoutX="112.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/simboloMusical.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="24.0" fitWidth="21.0" layoutX="5.0" layoutY="281.0" onMouseClicked="#musicaAnterior" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/anterior.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="32.0" fitWidth="31.0" layoutX="29.0" layoutY="276.0" onMouseClicked="#playMusica" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/play.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="24.0" fitWidth="21.0" layoutX="63.0" layoutY="281.0" onMouseClicked="#pausarMusica" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/pause.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="24.0" fitWidth="21.0" layoutX="87.0" layoutY="281.0" onMouseClicked="#stopMusica" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/stop.png" />
+      </image>
+   </ImageView>
+   <ImageView fitHeight="24.0" fitWidth="21.0" layoutX="111.0" layoutY="281.0" onMouseClicked="#proximaMusica" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/proxima.png" />
+      </image>
+   </ImageView>
+   <ImageView fx:id="audio" fitHeight="24.0" fitWidth="21.0" layoutX="153.0" layoutY="281.0" onMouseClicked="#mutarMusica" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@imagens/resources/audioOn.png" />
+      </image>
+   </ImageView>
+   <Slider fx:id="tempoMusica" layoutX="14.0" layoutY="227.0" prefHeight="14.0" prefWidth="292.0" />
+   <Slider fx:id="som" layoutX="178.0" layoutY="282.0" prefHeight="14.0" prefWidth="127.0" value="25.0" />
+   <Label fx:id="tempoAtual" layoutX="12.0" layoutY="241.0" text="00:00" textFill="WHITE" />
+   <Label fx:id="tempoTotal" layoutX="279.0" layoutY="241.0" text="00:00" textFill="WHITE" />
+   <ScrollPane hbarPolicy="NEVER" layoutX="19.0" layoutY="184.0" prefHeight="36.0" prefWidth="282.0" style="-fx-background-color: rgb(53, 53, 53);" vbarPolicy="NEVER">
+     <content>
+       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: rgb(53, 53, 53);">
+            <children>
+               <Label fx:id="nomeMusica" prefHeight="46.0" prefWidth="600.0" text="Nome-da-Musica" textFill="#30ea47">
+                  <font>
+                     <Font name="System Bold" size="18.0" />
+                  </font>
+               </Label>
+            </children>
+         </AnchorPane>
+     </content>
+   </ScrollPane>
+   <MediaView fx:id="mediaview" fitHeight="1.0" fitWidth="1.0" layoutX="22.0" />
+</AnchorPane>
