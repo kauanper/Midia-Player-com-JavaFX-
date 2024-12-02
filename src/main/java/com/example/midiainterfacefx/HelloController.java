@@ -1,5 +1,6 @@
 package com.example.midiainterfacefx;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -7,7 +8,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +33,8 @@ public class HelloController {
 
     public void initialize() {
         carregarMusicas();
-        nomeMusica.setText("Teste de Atualização");
+        formatarNomeMusica();
+        movimentar();
     }
 
     private void carregarMusicas(){
@@ -58,6 +62,7 @@ public class HelloController {
 
         mediaPlayer.play();
         formatarNomeMusica();
+        movimentar();
     }
 
     private void formatarNomeMusica() {
@@ -74,7 +79,16 @@ public class HelloController {
         }
     }
 
+    private void movimentar(){
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(15), nomeMusica);
 
+        transition.setFromX(300);
+        transition.setToX(-200);
+
+        transition.setCycleCount(TranslateTransition.INDEFINITE);
+
+        transition.play();
+    }
 
     public void minimizar(){
         ((Stage)telaAppMusica.getScene().getWindow()).toBack();
@@ -108,7 +122,6 @@ public class HelloController {
 
     public void playMusica(){
         mediaPlayer.play();
-        formatarNomeMusica();
     }
 
     public void pausarMusica(){
