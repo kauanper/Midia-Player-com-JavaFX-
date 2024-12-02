@@ -35,6 +35,7 @@ public class HelloController {
         carregarMusicas();
         formatarNomeMusica();
         movimentar();
+        definirTempo();
     }
 
     private void carregarMusicas(){
@@ -63,7 +64,52 @@ public class HelloController {
         mediaPlayer.play();
         formatarNomeMusica();
         movimentar();
+        definirTempo();
     }
+
+    private void definirTempo(){
+        mediaPlayer.setOnReady(() -> {
+            // Quando a música estiver pronta, definir o tempo total
+            Duration tempoAtualMusica = mediaPlayer.getMedia().getDuration();
+            int atualSegundos = (int) tempoAtualMusica.toSeconds();
+            int minutos = atualSegundos / 60;
+            int segundos = atualSegundos % 60;
+            String tempoFormatado = String.format("%02d:%02d", minutos, segundos);
+            tempoTotal.setText(tempoFormatado);
+
+            // Atualizar o valor máximo do slider com a duração total da música
+            tempoMusica.setMax(tempoAtualMusica.toSeconds());
+        });
+
+        // Listener para o slider de tempo da música
+        tempoMusica.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (tempoMusica.isValueChanging()) {
+                // Quando o valor do slider mudar, ajustar o tempo da música
+                double posicao = newValue.doubleValue();
+                alterarTempoMusica(posicao);
+            }
+        });
+
+        // Atualiza o tempo atual da música enquanto ela toca
+        mediaPlayer.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            Duration tempoTotalAtual = mediaPlayer.getCurrentTime();
+            int totalSegundos = (int) tempoTotalAtual.toSeconds();
+            int minutos = totalSegundos / 60;
+            int segundos = totalSegundos % 60;
+            String tempoFormatado = String.format("%02d:%02d", minutos, segundos);
+            tempoAtual.setText(tempoFormatado);
+
+            // Atualizar o valor do slider com o tempo atual
+            tempoMusica.setValue(tempoTotalAtual.toSeconds());
+        });
+    }
+
+    private void alterarTempoMusica(double posicao) {
+        // Alterar o tempo da música conforme a posição do slider
+        Duration novaDuracao = Duration.seconds(posicao);
+        mediaPlayer.seek(novaDuracao);
+    }
+
 
     private void formatarNomeMusica() {
         if (musicas != null && !musicas.isEmpty() && indexMusicaAtual >= 0 && indexMusicaAtual < musicas.size()) {
